@@ -1,0 +1,39 @@
+import socket
+
+# Socket create karo
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.bind(('127.0.0.1', 12345))
+server.listen(1)
+print("Server ready hai, client ka wait kar raha hai...")
+
+conn, addr = server.accept()
+print(f"Connected by {addr}")
+
+# Message receive aur send karna
+while True:
+  data = conn.recv(1024).decode()
+  if not data:
+    break
+  print(f"Client ka message: {data}")
+  conn.send("Hello from Server!".encode())
+
+conn.close()
+server.close()
+
+# client side
+
+import socket
+
+# Server se connect karo
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.connect(('127.0.0.1', 12345))
+
+# Message bhejo
+message = "Hello Server, mai Client hoon!"
+client.send(message.encode())
+
+# Response receive karo
+data = client.recv(1024).decode()
+print(f"Server ka reply: {data}")
+
+client.close()
